@@ -1,0 +1,11 @@
+MusicGearTable:
+  Type: "AWS::DynamoDB::Table"
+  DeletionPolicy: Retain
+  Properties:
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+    TableName: ${self:provider.environment.DYNAMODB_TABLE}
