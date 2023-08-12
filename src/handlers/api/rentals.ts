@@ -5,6 +5,8 @@ import {
   CreateRentalSchema,
   UpdateRentalSchema,
 } from "../../schemas/rental.js";
+import { metrics } from "../../common/utils.js";
+import { MetricUnits } from "@aws-lambda-powertools/metrics";
 
 const rentalIdPathSchema = z.object({
   id: z.string().uuid(),
@@ -36,7 +38,12 @@ export const update = ApiHandler(
     body: UpdateRentalSchema,
   }),
   async (request) => {
-    return await Rental.update(request.pathParameters.id, request.body);
+    await Rental.update(request.pathParameters.id, request.body);
+
+    // Use CloudWatch custom metrics for tracking key indicators
+    if (request.body.status === "rented") {
+      metrics.addMetric("RentalCount", MetricUnits.Count, 1);
+    }
   }
 );
 
