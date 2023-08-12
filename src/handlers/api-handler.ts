@@ -33,6 +33,7 @@ export function ApiHandler<T extends ZodSchema, R>(
             body: "Not found",
           };
         }
+        logger.error("Unhandled error", error as Error);
         return {
           statusCode: 500,
           body: "Unexpected error",
