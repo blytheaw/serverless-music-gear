@@ -9,9 +9,9 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import * as uuid from "uuid";
-import { CreateRental, UpdateRental } from "../schemas/rental";
-import { tracer } from "../common/utils";
-import { RentalData } from "../models/data/rental";
+import { CreateRental, UpdateRental } from "../schemas/rental.js";
+import { tracer } from "../common/utils.js";
+import { RentalData } from "../models/data/rental.js";
 
 const ddb = DynamoDBDocumentClient.from(
   tracer.captureAWSv3Client(
@@ -24,7 +24,7 @@ const ddb = DynamoDBDocumentClient.from(
   }
 );
 
-export * as Rental from "./rental";
+export * as Rental from "./rental.js";
 
 export async function create(rental: CreateRental) {
   const id = uuid.v1();
@@ -67,7 +67,7 @@ export async function list() {
   const rentalList: RentalData[] = [];
 
   let scanResults: ScanCommandOutput;
-  let startKey: Record<string, any>;
+  let startKey: Record<string, any> | undefined;
   do {
     scanResults = await ddb.send(
       new ScanCommand({
@@ -76,7 +76,7 @@ export async function list() {
       })
     );
 
-    scanResults.Items.map((i) => rentalList.push(i as RentalData));
+    scanResults?.Items?.map((i) => rentalList.push(i as RentalData));
     startKey = scanResults.LastEvaluatedKey;
   } while (scanResults.LastEvaluatedKey);
 

@@ -2,8 +2,8 @@ import { captureLambdaHandler } from "@aws-lambda-powertools/tracer";
 import middy from "@middy/core";
 import { APIGatewayEvent, APIGatewayProxyResult, Handler } from "aws-lambda";
 import { z, ZodError, ZodSchema } from "zod";
-import { logger, metrics, tracer } from "../common/utils";
-import { ResourceNotFoundError } from "../models/errors/resource-not-found-error";
+import { logger, metrics, tracer } from "../common/utils.js";
+import { ResourceNotFoundError } from "../models/errors/resource-not-found-error.js";
 import { injectLambdaContext } from "@aws-lambda-powertools/logger";
 import { logMetrics } from "@aws-lambda-powertools/metrics";
 

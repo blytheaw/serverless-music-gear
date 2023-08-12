@@ -2,18 +2,21 @@
   "name": "serverless-music-gear",
   "version": "0.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc -w",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit",
+    "deploy:dev": "sls deploy -s dev",
+    "deploy:prod": "sls deploy -s prod"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@tsconfig/node18": "^18.2.0",
     "@types/aws-lambda": "^8.10.119",
     "@types/node": "^7.0.5",
+    "@types/uuid": "^9.0.2",
     "esbuild": "^0.17.19",
     "serverless-esbuild": "^1.46.0",
     "typescript": "^5.1.6"

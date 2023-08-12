@@ -1,7 +1,10 @@
 import { z } from "zod";
-import { Rental } from "../../providers/rental";
-import { ApiHandler } from "../api-handler";
-import { CreateRentalSchema, UpdateRentalSchema } from "../../schemas/rental";
+import { Rental } from "../../providers/rental.js";
+import { ApiHandler } from "../api-handler.js";
+import {
+  CreateRentalSchema,
+  UpdateRentalSchema,
+} from "../../schemas/rental.js";
 
 const rentalIdPathSchema = z.object({
   id: z.string().uuid(),
@@ -10,7 +13,7 @@ const rentalIdPathSchema = z.object({
 export const create = ApiHandler(
   z.object({ body: CreateRentalSchema }),
   async (request) => {
-    await Rental.create(request.body);
+    return await Rental.create(request.body);
   }
 );
 
