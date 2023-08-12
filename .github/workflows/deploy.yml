@@ -20,8 +20,8 @@ jobs:
 
       - run: npm ci
 
-      - if: github.event_name == "push"
+      - if: github.event_name == 'push'
         run: npm run deploy:dev
 
-      - if: github.event_name == "release"
+      - if: github.event_name == 'release'
         run: npm run deploy:prod
