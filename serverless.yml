@@ -10,6 +10,9 @@ provider:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     POWERTOOLS_SERVICE_NAME: ${self:service}
     POWERTOOLS_METRICS_NAMESPACE: ${self:service}
+  tracing:
+    lambda: true
+    apiGateway: true
   iam:
     role:
       statements:
