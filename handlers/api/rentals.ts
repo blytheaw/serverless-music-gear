@@ -1,8 +1,8 @@
 import { ZodError, z } from "zod";
-import { Product } from "../../providers/product";
+import { Rental } from "../../providers/rental";
 import { APIGatewayEvent } from "aws-lambda";
 
-const productPathSchema = z.object({
+const rentalIdPathSchema = z.object({
   pathParameters: z.object({
     id: z.string().uuid(),
   }),
@@ -14,9 +14,9 @@ export const list = async (event: APIGatewayEvent) => {};
 
 export const get = async (event: APIGatewayEvent) => {
   try {
-    const request = productPathSchema.parse(event);
+    const request = rentalIdPathSchema.parse(event);
 
-    return await Product.fromId(request.pathParameters.id);
+    return await Rental.fromId(request.pathParameters.id);
   } catch (e) {
     if (e instanceof ZodError) {
       return {
@@ -30,6 +30,6 @@ export const get = async (event: APIGatewayEvent) => {
   }
 };
 
-export const update = async (event) => {};
+export const update = async (event: APIGatewayEvent) => {};
 
-export const remove = async (event) => {};
+export const remove = async (event: APIGatewayEvent) => {};

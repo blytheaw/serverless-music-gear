@@ -10,7 +10,7 @@ const ddb = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.AWS_REGION })
 );
 
-export * as Product from "./product";
+export * as Rental from "./rental";
 
 export async function create() {
   await ddb.send(

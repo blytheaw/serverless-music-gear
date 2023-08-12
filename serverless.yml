@@ -23,42 +23,42 @@ provider:
 
 functions:
   create:
-    handler: handlers/api/products.create
+    handler: handlers/api/rentals.create
     events:
       - http:
-          path: products
+          path: rentals
           method: post
           cors: true
 
   list:
-    handler: handlers/api/products.list
+    handler: handlers/api/rentals.list
     events:
       - http:
-          path: products
+          path: rentals
           method: get
           cors: true
 
   get:
-    handler: handlers/api/products.get
+    handler: handlers/api/rentals.get
     events:
       - http:
-          path: products/{id}
+          path: rentals/{id}
           method: get
           cors: true
 
   update:
-    handler: handlers/api/products.update
+    handler: handlers/api/rentals.update
     events:
       - http:
-          path: products/{id}
+          path: rentals/{id}
           method: put
           cors: true
 
   delete:
-    handler: handlers/api/products.remove
+    handler: handlers/api/rentals.remove
     events:
       - http:
-          path: products/{id}
+          path: rentals/{id}
           method: delete
           cors: true
 
