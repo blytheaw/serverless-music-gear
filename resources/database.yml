@@ -1,6 +1,5 @@
 MusicGearRentalsTable:
   Type: "AWS::DynamoDB::Table"
-  DeletionPolicy: Retain
   Properties:
     BillingMode: PAY_PER_REQUEST
     AttributeDefinitions:

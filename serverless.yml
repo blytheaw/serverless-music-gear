@@ -8,11 +8,14 @@ provider:
   region: us-east-1
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    # Powertools setup
     POWERTOOLS_SERVICE_NAME: ${self:service}
     POWERTOOLS_METRICS_NAMESPACE: ${self:service}
+  # Enable X-Ray tracing for both APIGW and Lambda
   tracing:
     lambda: true
     apiGateway: true
+  # Read/write permissions for functions to DDB
   iam:
     role:
       statements:
@@ -26,9 +29,7 @@ provider:
             - dynamodb:DeleteItem
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
-package:
-  individually: true
-
+# Function definitions with event sources
 functions:
   create:
     handler: src/handlers/api/rentals.create
@@ -70,8 +71,10 @@ functions:
           method: delete
           cors: true
 
+# External files for CFN resources
 resources:
   Resources: ${file(./resources/database.yml)}
 
+# Optimize bundle sizes with esbuild
 plugins:
   - serverless-esbuild
