@@ -1,9 +1,10 @@
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DeleteCommand,
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
+  ScanCommand,
   ScanCommandOutput,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
@@ -15,7 +16,12 @@ import { RentalData } from "../models/data/rental";
 const ddb = DynamoDBDocumentClient.from(
   tracer.captureAWSv3Client(
     new DynamoDBClient({ region: process.env.AWS_REGION })
-  )
+  ),
+  {
+    marshallOptions: {
+      removeUndefinedValues: true,
+    },
+  }
 );
 
 export * as Rental from "./rental";
@@ -46,10 +52,12 @@ export async function update(id: string, rental: UpdateRental) {
       Key: {
         id,
       },
-      UpdateExpression: "SET status = :s, description = :d",
+      UpdateExpression: "SET #st = :s",
+      ExpressionAttributeNames: {
+        "#st": "status",
+      },
       ExpressionAttributeValues: {
-        s: rental.status,
-        d: rental.description,
+        ":s": rental.status,
       },
     })
   );
@@ -58,19 +66,19 @@ export async function update(id: string, rental: UpdateRental) {
 export async function list() {
   const rentalList: RentalData[] = [];
 
-  let queryResults: ScanCommandOutput;
+  let scanResults: ScanCommandOutput;
   let startKey: Record<string, any>;
   do {
-    queryResults = await ddb.send(
+    scanResults = await ddb.send(
       new ScanCommand({
         TableName: process.env.DYNAMODB_TABLE,
         ExclusiveStartKey: startKey,
       })
     );
 
-    queryResults.Items.map((i) => rentalList.push(i as RentalData));
-    startKey = queryResults.LastEvaluatedKey;
-  } while (queryResults.LastEvaluatedKey);
+    scanResults.Items.map((i) => rentalList.push(i as RentalData));
+    startKey = scanResults.LastEvaluatedKey;
+  } while (scanResults.LastEvaluatedKey);
 
   return rentalList;
 }
