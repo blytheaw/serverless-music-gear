@@ -12,6 +12,7 @@ import * as uuid from "uuid";
 import { CreateRental, UpdateRental } from "../schemas/rental.js";
 import { tracer } from "../common/utils.js";
 import { RentalData } from "../models/data/rental.js";
+import { ResourceNotFoundError } from "../models/errors/resource-not-found-error.js";
 
 const ddb = DynamoDBDocumentClient.from(
   tracer.captureAWSv3Client(
@@ -46,21 +47,34 @@ export async function create(rental: CreateRental) {
 }
 
 export async function update(id: string, rental: UpdateRental) {
-  await ddb.send(
-    new UpdateCommand({
-      TableName: process.env.DYNAMODB_TABLE,
-      Key: {
-        id,
-      },
-      UpdateExpression: "SET #st = :s",
-      ExpressionAttributeNames: {
-        "#st": "status",
-      },
-      ExpressionAttributeValues: {
-        ":s": rental.status,
-      },
-    })
-  );
+  const currentRental = (
+    await ddb.send(
+      new GetCommand({
+        TableName: process.env.DYNAMODB_TABLE,
+        Key: { id },
+      })
+    )
+  ).Item as RentalData;
+
+  if (currentRental) {
+    await ddb.send(
+      new UpdateCommand({
+        TableName: process.env.DYNAMODB_TABLE,
+        Key: {
+          id,
+        },
+        UpdateExpression: "SET #st = :s",
+        ExpressionAttributeNames: {
+          "#st": "status",
+        },
+        ExpressionAttributeValues: {
+          ":s": rental.status,
+        },
+      })
+    );
+  } else {
+    throw new ResourceNotFoundError(`No rental found with id ${id}`);
+  }
 }
 
 export async function list() {
@@ -92,6 +106,10 @@ export async function fromId(id: string) {
       },
     })
   );
+
+  if (!result.Item) {
+    throw new ResourceNotFoundError(`No rental found with id ${id}`);
+  }
 
   return result.Item;
 }

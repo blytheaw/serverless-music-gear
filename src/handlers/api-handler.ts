@@ -17,7 +17,7 @@ export function ApiHandler<T extends ZodSchema, R>(
         event.body = JSON.parse(event.body ?? "{}");
         const res = await fn(schema.parse(event));
         return {
-          statusCode: res === undefined ? 204 : 200,
+          statusCode: 200,
           body: JSON.stringify(res),
         };
       } catch (error) {
