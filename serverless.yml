@@ -64,3 +64,6 @@ functions:
 
 resources:
   Resources: ${file(./resources/database.yml)}
+
+plugins:
+  - serverless-esbuild
