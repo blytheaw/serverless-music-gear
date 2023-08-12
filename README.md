@@ -1,81 +1,51 @@
-<!--
-title: TODO
-description: This example shows your how to create a TypeScript powered REST API with DynamoDB.
-layout: Doc
-framework: v1
-platform: AWS
-language: nodeJS
-priority: 10
-authorLink: 'https://github.com/QuantumInformation'
-authorName: Nikos
-authorAvatar: 'https://avatars0.githubusercontent.com/u/216566?v=4&s=140'
--->
+# Serverless Music Rentals
 
-# Introduction
+This sample application demonstrates a basic CRUD REST API using NodeJS, TypeScript, and Serverless Framework
 
-TypeScript (ts) offers type safety which is helpful when working with the AWS SDK, which comes with ts definitions (d.ts)
+## Setup
 
-# compiling
-
-You can compile the ts files in this directory by 1st installing typescript via
-
-`npm install -g typescript`
-
-then
-
-`npm i`
-
-You can then run the compiler by running `tsc` in this directory. It will pull the settings from .tsconfig and extra @types
-from package.json. The output create.js file is what will be uploaded by serverless.
-
-For brevity, I have just demonstrated this to match with the todos/create.js, todos/list.js, todos/get.js and todos/update.js lambda function
+This project uses NodeJS 18. Install it first, then install dependencies with `npm install`
 
 ## Usage
 
-You can create, retrieve, update, or delete todos with the following commands:
+You can create, retrieve, update, or delete instrument rentals with the following commands:
 
-### Create a Todo
+### Create a new rental listing
 
-```bash
-curl -X POST https://XXXXXXX.execute-api.us-east-1.amazonaws.com/dev/todos --data '{ "text": "Learn Serverless" }'
+POST /rentals
+
+```json
+{
+  "name": "instrument name",
+  "description": "instrument description",
+  "type": "guitar"
+}
 ```
 
-Example Result:
-```bash
-{"text":"Learn Serverless","id":"ee6490d0-aa11e6-9ede-afdfa051af86","createdAt":1479138570824,"checked":false,"updatedAt":1479138570824}%
+### List all rentals
+
+GET /rentals
+
+### Get one rental by ID
+
+GET /rentals/{id}
+
+### Update a rental to rent or return it
+
+PUT /rentals/{id}
+
+```json
+{
+  "status": "rented"
+}
 ```
 
-### List all Todos
+### Delete a rental from the listings
 
-```bash
-curl https://XXXXXXX.execute-api.us-east-1.amazonaws.com/dev/todos
-```
+DELETE /rentals/{id}
 
-Example output:
-```bash
-[{"text":"Deploy my first service","id":"ac90feaa11e6-9ede-afdfa051af86","checked":true,"updatedAt":1479139961304},{"text":"Learn Serverless","id":"206793aa11e6-9ede-afdfa051af86","createdAt":1479139943241,"checked":false,"updatedAt":1479139943241}]%
-```
+## Deployment
 
-### Get one Todo
+Prerequisite: make sure your AWS credentials are configured locally
 
-```bash
-# Replace the <id> part with a real id from your todos table
-curl https://XXXXXXX.execute-api.us-east-1.amazonaws.com/dev/todos/<id>
-```
-
-Example Result:
-```bash
-{"text":"Learn Serverless","id":"ee6490d0-aa11e6-9ede-afdfa051af86","createdAt":1479138570824,"checked":false,"updatedAt":1479138570824}%
-```
-
-### Update a Todo
-
-```bash
-# Replace the <id> part with a real id from your todos table
-curl -X PUT https://XXXXXXX.execute-api.us-east-1.amazonaws.com/dev/todos/<id> --data '{ "text": "Learn Serverless", "checked": true }'
-```
-
-Example Result:
-```bash
-{"text":"Learn Serverless","id":"ee6490d0-aa11e6-9ede-afdfa051af86","createdAt":1479138570824,"checked":true,"updatedAt":1479138570824}%
-```
+Deploy with `sls deploy -s <stage>`
