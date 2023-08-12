@@ -6,4 +6,11 @@ export const CreateRentalSchema = z.object({
   description: z.string().nullish(),
 });
 
-export type Rental = z.infer<typeof CreateRentalSchema>;
+export const UpdateRentalSchema = z.object({
+  id: z.string().uuid(),
+  description: z.string().nullish(),
+  status: z.enum(["available", "rented"]),
+});
+
+export type CreateRental = z.infer<typeof CreateRentalSchema>;
+export type UpdateRental = z.infer<typeof UpdateRentalSchema>;

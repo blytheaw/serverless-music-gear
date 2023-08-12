@@ -5,9 +5,10 @@ import {
   GetCommand,
   PutCommand,
   ScanCommandOutput,
+  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import * as uuid from "uuid";
-import { Rental } from "../schemas/rental";
+import { CreateRental, UpdateRental } from "../schemas/rental";
 import { tracer } from "../common/utils";
 import { RentalData } from "../models/data/rental";
 
@@ -19,7 +20,7 @@ const ddb = DynamoDBDocumentClient.from(
 
 export * as Rental from "./rental";
 
-export async function create(rental: Rental) {
+export async function create(rental: CreateRental) {
   const id = uuid.v1();
 
   await ddb.send(
@@ -36,6 +37,22 @@ export async function create(rental: Rental) {
   return {
     id,
   };
+}
+
+export async function update(id: string, rental: UpdateRental) {
+  await ddb.send(
+    new UpdateCommand({
+      TableName: process.env.DYNAMODB_TABLE,
+      Key: {
+        id,
+      },
+      UpdateExpression: "SET status = :s, description = :d",
+      ExpressionAttributeValues: {
+        s: rental.status,
+        d: rental.description,
+      },
+    })
+  );
 }
 
 export async function list() {
