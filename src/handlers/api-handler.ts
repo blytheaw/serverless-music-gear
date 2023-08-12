@@ -2,8 +2,10 @@ import { captureLambdaHandler } from "@aws-lambda-powertools/tracer";
 import middy from "@middy/core";
 import { APIGatewayEvent, APIGatewayProxyResult, Handler } from "aws-lambda";
 import { z, ZodError, ZodSchema } from "zod";
-import { tracer } from "../common/utils";
+import { logger, metrics, tracer } from "../common/utils";
 import { ResourceNotFoundError } from "../models/errors/resource-not-found-error";
+import { injectLambdaContext } from "@aws-lambda-powertools/logger";
+import { logMetrics } from "@aws-lambda-powertools/metrics";
 
 export function ApiHandler<T extends ZodSchema, R>(
   schema: T,
@@ -37,5 +39,8 @@ export function ApiHandler<T extends ZodSchema, R>(
         };
       }
     }
-  ).use(captureLambdaHandler(tracer));
+  )
+    .use(captureLambdaHandler(tracer))
+    .use(injectLambdaContext(logger, { clearState: true }))
+    .use(logMetrics(metrics, { captureColdStartMetric: true }));
 }
