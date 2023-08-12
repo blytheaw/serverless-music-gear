@@ -2,6 +2,8 @@
 
 This sample application demonstrates a basic CRUD REST API using NodeJS, TypeScript, and Serverless Framework
 
+This project used [this template](https://github.com/serverless/examples/tree/v3/aws-node-rest-api-with-dynamodb) from the Serverless Framework examples as a starting point
+
 ## Setup
 
 This project uses NodeJS 18. Install it first, then install dependencies with `npm install`
