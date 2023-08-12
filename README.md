@@ -48,4 +48,6 @@ DELETE /rentals/{id}
 
 Prerequisite: make sure your AWS credentials are configured locally
 
-Deploy with `sls deploy -s <stage>`
+- Deploy to dev stage with `npm run deploy:dev`
+- Deploy to prod stage with `npm run deploy:prod`
+- Deploy to an alternate stage with `npx sls deploy -s <stage>`
