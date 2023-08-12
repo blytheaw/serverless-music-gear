@@ -3,12 +3,10 @@ import { z } from "zod";
 export const CreateRentalSchema = z.object({
   name: z.string(),
   type: z.enum(["drums", "guitar", "bass", "keyboard", "microphone"]),
-  description: z.string().nullish(),
+  description: z.string(),
 });
 
 export const UpdateRentalSchema = z.object({
-  id: z.string().uuid(),
-  description: z.string().nullish(),
   status: z.enum(["available", "rented"]),
 });
 
