@@ -23,9 +23,12 @@ provider:
             - dynamodb:DeleteItem
           Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
+package:
+  individually: true
+
 functions:
   create:
-    handler: handlers/api/rentals.create
+    handler: src/handlers/api/rentals.create
     events:
       - http:
           path: rentals
@@ -33,7 +36,7 @@ functions:
           cors: true
 
   list:
-    handler: handlers/api/rentals.list
+    handler: src/handlers/api/rentals.list
     events:
       - http:
           path: rentals
@@ -41,7 +44,7 @@ functions:
           cors: true
 
   get:
-    handler: handlers/api/rentals.get
+    handler: src/handlers/api/rentals.get
     events:
       - http:
           path: rentals/{id}
@@ -49,7 +52,7 @@ functions:
           cors: true
 
   update:
-    handler: handlers/api/rentals.update
+    handler: src/handlers/api/rentals.update
     events:
       - http:
           path: rentals/{id}
@@ -57,7 +60,7 @@ functions:
           cors: true
 
   delete:
-    handler: handlers/api/rentals.remove
+    handler: src/handlers/api/rentals.remove
     events:
       - http:
           path: rentals/{id}
